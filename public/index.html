@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tegn og Gæt</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+    <!-- Hovedmenu -->
+    <div id="mainMenu">
+        <div class="menu-container">
+            <h1>Tegn og Gæt</h1>
+            <div class="username-container">
+                <label for="mainUsernameInput">Dit navn:</label>
+                <input type="text" id="mainUsernameInput" placeholder="Indtast dit navn" maxlength="15">
+            </div>
+            <div class="menu-buttons">
+                <button id="createLobbyBtn" class="menu-btn">Opret Lobby</button>
+                <button id="joinLobbyBtn" class="menu-btn">Tilslut Lobby</button>
+                <button id="browseLobbiesBtn" class="menu-btn">Browse Lobbyer</button>
+            </div>
+            <div class="footer">
+                <p>Lavet med ❤️ | v1.0</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Opret Lobby skærm -->
+    <div id="createLobbyScreen" class="sub-screen" style="display: none;">
+        <div class="sub-container">
+            <h2>Opret Ny Lobby</h2>
+            <div class="settings-form">
+                <div class="setting-group">
+                    <label for="lobbyNameInput">Lobby Navn:</label>
+                    <input type="text" id="lobbyNameInput" placeholder="Min Lobby" maxlength="20">
+                </div>
+                
+                <div class="setting-group">
+                    <label for="isPublicToggle">Offentlig Lobby:</label>
+                    <label class="switch">
+                        <input type="checkbox" id="isPublicToggle" checked>
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+                
+                <div class="setting-group">
+                    <label for="maxPlayersSlider">Max Spillere: <span id="maxPlayersValue">8</span></label>
+                    <input type="range" id="maxPlayersSlider" min="2" max="10" value="8">
+                </div>
+                
+                <div class="setting-group">
+                    <label for="roundTimeSlider">Sekunder per Runde: <span id="roundTimeValue">80</span></label>
+                    <input type="range" id="roundTimeSlider" min="50" max="200" value="80">
+                </div>
+                
+                <div class="setting-group">
+                    <label for="maxRoundsSlider">Antal Runder: <span id="maxRoundsValue">10</span></label>
+                    <input type="range" id="maxRoundsSlider" min="3" max="20" value="10">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="infiniteRoundsCheckbox">
+                        Uendelig
+                    </label>
+                </div>
+                
+                <div class="setting-group">
+                    <label for="resetScoresCheckbox">Nulstil Score Efter Spil:</label>
+                    <label class="switch">
+                        <input type="checkbox" id="resetScoresCheckbox" checked>
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+            </div>
+            
+            <div class="button-group">
+                <button id="createLobbySubmitBtn" class="primary-btn">Opret Lobby</button>
+                <button id="backToMainFromCreateBtn" class="secondary-btn">Tilbage</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tilslut Lobby skærm -->
+    <div id="joinLobbyScreen" class="sub-screen" style="display: none;">
+        <div class="sub-container">
+            <h2>Tilslut Lobby</h2>
+            <div class="join-form">
+                <div class="input-group">
+                    <label for="lobbyCodeInput">Lobby Kode:</label>
+                    <input type="text" id="lobbyCodeInput" placeholder="Indtast kode" maxlength="15">
+                </div>
+                <p class="info-text">Indtast den lobby-kode du har fået af din ven</p>
+            </div>
+            <div class="button-group">
+                <button id="joinLobbySubmitBtn" class="primary-btn">Tilslut</button>
+                <button id="backToMainFromJoinBtn" class="secondary-btn">Tilbage</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Browse Lobbyer skærm -->
+    <div id="browseLobbiesScreen" class="sub-screen" style="display: none;">
+        <div class="sub-container">
+            <h2>Browse Lobbyer</h2>
+            <div class="filter-controls">
+                <div class="search-group">
+                    <input type="text" id="lobbySearchInput" placeholder="Søg efter lobby...">
+                    <button id="refreshLobbiesBtn"><i class="refresh-icon">↻</i></button>
+                </div>
+                <div class="filter-group">
+                    <label>
+                        <input type="checkbox" id="hideFullLobbiesCheckbox" checked>
+                        Skjul fulde lobbyer
+                    </label>
+                    <label>
+                        <input type="checkbox" id="hideInProgressCheckbox" checked>
+                        Skjul spil i gang
+                    </label>
+                </div>
+            </div>
+            <div class="lobbies-list" id="lobbiesList">
+                <div class="loading-indicator">Indlæser lobbyer...</div>
+                <!-- Lobbyer indsættes her dynamisk -->
+            </div>
+            <div class="button-group">
+                <button id="backToMainFromBrowseBtn" class="secondary-btn">Tilbage</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lobby Venteværelse -->
+    <div id="lobbyScreen" style="display: none;">
+        <div class="lobby-container">
+            <div class="lobby-header">
+                <h2 id="lobbyName">Lobby Navn</h2>
+                <div class="lobby-code-container">
+                    <span>Kode: </span>
+                    <span id="lobbyCodeDisplay" class="lobby-code">TIGER1234</span>
+                    <button id="copyLobbyCodeBtn">Kopier</button>
+                </div>
+            </div>
+            <div class="lobby-content">
+                <div class="lobby-players">
+                    <h3>Spillere (<span id="playerCount">0</span>/<span id="maxPlayers">8</span>)</h3>
+                    <div id="lobbyPlayersList" class="players-list">
+                        <!-- Spillere indsættes her dynamisk -->
+                    </div>
+                </div>
+                <div class="lobby-chat">
+                    <h3>Lobby Chat</h3>
+                    <div id="lobbyChatMessages" class="chat-messages"></div>
+                    <div class="chat-input-container">
+                        <input type="text" id="lobbyChatInput" placeholder="Skriv besked...">
+                        <button id="lobbyChatSendBtn">Send</button>
+                    </div>
+                </div>
+                <div class="lobby-settings" id="lobbySettingsPanel">
+                    <h3>Indstillinger</h3>
+                    <div class="lobby-settings-content">
+                        <div class="setting-group">
+                            <label for="editLobbyNameInput">Lobby Navn:</label>
+                            <input type="text" id="editLobbyNameInput" maxlength="20">
+                        </div>
+                        
+                        <div class="setting-group">
+                            <label for="editPublicToggle">Offentlig Lobby:</label>
+                            <label class="switch">
+                                <input type="checkbox" id="editPublicToggle" checked>
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                        
+                        <div class="setting-group">
+                            <label for="editMaxPlayersSlider">Max Spillere: <span id="editMaxPlayersValue">8</span></label>
+                            <input type="range" id="editMaxPlayersSlider" min="2" max="10" value="8">
+                        </div>
+                        
+                        <div class="setting-group">
+                            <label for="editRoundTimeSlider">Sekunder per Runde: <span id="editRoundTimeValue">80</span></label>
+                            <input type="range" id="editRoundTimeSlider" min="50" max="200" value="80">
+                        </div>
+                        
+                        <div class="setting-group">
+                            <label for="editMaxRoundsSlider">Antal Runder: <span id="editMaxRoundsValue">10</span></label>
+                            <input type="range" id="editMaxRoundsSlider" min="3" max="20" value="10">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="editInfiniteRoundsCheckbox">
+                                Uendelig
+                            </label>
+                        </div>
+                        
+                        <div class="setting-group">
+                            <label for="editResetScoresCheckbox">Nulstil Score Efter Spil:</label>
+                            <label class="switch">
+                                <input type="checkbox" id="editResetScoresCheckbox" checked>
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                        
+                        <button id="saveSettingsBtn" class="primary-btn">Gem Indstillinger</button>
+                    </div>
+                </div>
+            </div>
+            <div class="lobby-footer">
+                <button id="startGameBtn" class="primary-btn">Start Spil</button>
+                <button id="leaveLobbyBtn" class="secondary-btn">Forlad Lobby</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Spilleskærm -->
+    <div id="gameScreen" style="display: none;">
+        <div class="container">
+            <div class="game-container">
+                <div class="leaderboard">
+                    <h3>Spillere</h3>
+                    <div id="leaderboardContent" class="leaderboard-content">
+                        <!-- Spillerliste genereres dynamisk her -->
+                    </div>
+                    <div class="game-info">
+                        <div id="currentWord" class="current-word">_ _ _ _ _</div>
+                        <div id="roundInfo" class="round-info">Runde: 1/5</div>
+                        <div id="timeLeft" class="time-left">Tid: 60s</div>
+                    </div>
+                </div>
+                <div class="drawing-area">
+                    <div class="tools">
+                        <div class="slider-container">
+                            <input type="range" id="penSizeSlider" min="1" max="50" value="5">
+                            <div id="penSizeDisplay"></div>
+                        </div>
+                        <button id="eraserButton" class="tool-btn" style="background-image: url('/images/eraser_icon.svg');"></button>
+                        <button id="undoButton" class="tool-btn" style="background-image: url('/images/back_arrow_icon.svg');"></button>
+                        <button id="redoButton" class="tool-btn" style="background-image: url('/images/undo_undo_arrow_icon.svg');"></button>
+                        <input type="color" id="colorPicker">
+                    </div>
+                    <canvas id="drawingCanvas" width="800" height="600"></canvas>
+                </div>
+                <div class="sidebar">
+                    <h3>Chat</h3>
+                    <div id="chatMessages" class="chat-messages"></div>
+                    <input type="text" id="chatInput" class="chat-input" placeholder="Skriv dit gæt...">
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Game End Screen -->
+    <div id="gameEndScreen" style="display: none;">
+        <div class="end-screen-container">
+            <h2>Spillet er slut!</h2>
+            <div class="winners-container">
+                <h3>Vindere</h3>
+                <div class="winners-podium">
+                    <div class="winner" id="secondPlace">
+                        <div class="trophy silver">2</div>
+                        <div class="winner-name">-</div>
+                        <div class="winner-score">0</div>
+                    </div>
+                    <div class="winner" id="firstPlace">
+                        <div class="trophy gold">1</div>
+                        <div class="winner-name">-</div>
+                        <div class="winner-score">0</div>
+                    </div>
+                    <div class="winner" id="thirdPlace">
+                        <div class="trophy bronze">3</div>
+                        <div class="winner-name">-</div>
+                        <div class="winner-score">0</div>
+                    </div>
+                </div>
+            </div>
+            <div class="all-results">
+                <h3>Alle resultater</h3>
+                <div id="resultsTable" class="results-table">
+                    <!-- Resultater indsættes her dynamisk -->
+                </div>
+            </div>
+            <div class="end-screen-buttons">
+                <button id="returnToLobbyBtn" class="primary-btn">Tilbage til Lobby</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" style="display: none;">
+        <div class="loading-spinner"></div>
+        <div id="loadingMessage">Indlæser...</div>
+    </div>
+    
+    <!-- Error Modal -->
+    <div id="errorModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Fejl</h3>
+                <span class="close-modal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <p id="errorMessage">Der skete en fejl.</p>
+            </div>
+            <div class="modal-footer">
+                <button id="errorOkBtn" class="primary-btn">OK</button>
+            </div>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>

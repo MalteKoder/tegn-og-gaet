@@ -1,0 +1,140 @@
+1. Generelt
+
+Projektets navn:
+	Ukendt
+Kort beskrivelse af projektet:
+	En tegn og gæt hvor man kan joine lobbys, lave din egen eller joine en random lobby.
+	Man skal kunne vælge nogle settings hvis man selv laver en lobby, som f.eks:
+		Hvor mange spiller der kan joine fra 2 - 20
+		Hvilket sprog der skal komme ord i
+		Drawtime. Altså hvor længe man har til at tegne
+		Hvor mange runder der er i spillet. fra 2 - 20
+		Forskellige gamemodes. Senere feature
+		Hvor mange ord tegneren kan vælge i mellem. Fra 1 - 5
+		Hvor mange hints der gennem runden. Altså bokstav i ordet der bliver synlig. Fra 0 - 5
+	Og så skal det generalt bare være en tegn og gæt spil
+
+Hovedmål (Hvad skal gøre det bedre end Skribbl.io?):
+	Vores visuelle effekter gør den helt klart bedre en skribble er planen. 
+	Altså vores GUI gør det flottere. Måden man tegner på bliver også langt
+	bedre end i skribbl. Man skal både kunne vælge:
+		farve på en farvepallete. 
+		Gå tilbage til tidligere farve
+		Vælge pensel-størrelse 1 - 5
+		trykke tilbage, eller trykke Ctrl + Z
+		trykke frem, eller trykke Ctrl + Shift + Z
+
+Målgruppe (Hvem er det tiltænkt?):
+	Den er tiltænkt piger i alderen 8-25 og også andre der har interesse for tegne. Tror ikke det er mange
+	mænd. Men jeg spiller det da med min mor og far. Så ja
+
+2. Funktionalitet
+
+Hvordan skal brugerne spille spillet? (runde-baseret, point-system osv.)
+Spillet starter med at alle har 0 point. Og en tilfældig spiller bliver valgt som først til at tegne.
+Du må gerne komme med et point system. Jeg ved ikke hvordan. 
+
+Skal der være private/spil med venner, eller kun offentlige spil?
+Der skal sevfølgelig være private spil, hvor venner kun kan joine via link, eller skrive koden som er en 6 cifret random kode.
+Der skal også være public spil hvor lobbylederen kan slå til public, hvor så alle der surfer ledige lobbys ville kunne se den.
+Der skal man kunne sortere mellem sprog, antal spillere og alle de andre tidligere nævnt settings, hvis man vil finde den helt rigtige
+Der skal også være en quick join feature, som bare sender dig ind i den hurtigste lobby den kan finde. Hvis der er noget info om spilleren på google eller deres browser.
+Altså som fks hvilket land brugeen er fra. Hvis nu google siger at brugeren er fra danmark så skal han joines med en dansk lobby. Hvis ingen ting er synligt, eller han bruger en vpn, skal
+han bare ind i den nærmste engelske, da der er flest der kan forstå det
+
+Hvordan vælges ordene? (manuel liste, AI, ekstern ordbog?)
+Jeg tror den basic feature kommer til at være med en manuel liste, senere vil der så komme en ordbog, og på et tidspunkt vil man kunne købe en premium feature der unlocker nogle
+ting, som fks flere farver. Guld sølv og bronze farver fks. AI til at determe ord i deres lobby. Hvis de er lobbyleder vil det blive valgt med AI osv. Jeg har ikke rigtigt lyst
+til at være sådan en sellout type of guy. Men føler jeg er nød til det, da det godt kunne blive et godt spil. 
+
+Skal brugerne kunne indsende ord?
+Ja der skal være en feature hvor lobbylederen skal kunne indtaste nogle custom words. Han skal kunne vælge om han vil spille med en chance for at få en af dem, eller bare kun med hans custom ord.
+Det er dog kun hvis der er mere end 40 custom ord i hans boks. Ordene skal skrives med et komma imellem som her: ord1, ord2, ord3,
+Der skal dog senere være en AntiSlur AI feature gratis, som automatisk kommer på hvis lobbyen er public. Hvis ikke så må vennerne gøre hvad de vil ;). Men indtil vi får AI, skal det bare være en liste med
+nogle bandeord som jeg har, som tjekker inden den sender det ud i chatten, eller på canvas.
+
+Skal der være en anti-cheat eller auto-detect for at stoppe snyd?
+Ja. Der skal være en feature til at tjekke hvis spillere er inde og pille ved koden. Altså i Inspect. Hvis en spiller skriver ordet, med noget foran eller bagved som fks hvis ordet er
+peanut, og jeg så inden jeg gætter det, for at hjælpe min ven, skriver *peanut i chatten, så den ikke går i gennem, så skal personens besked ikke vises og han skal kickes. Kun hvis det er en
+public server. Mine private servere skal være fuldstændig åbne, men der skal være en feature til at slå det til eller fra. Det samme med AntiSlur. Hvis nogen tekst bliver genkendt på canvas, skal personens tegning slettes, og personen
+der tegner skal kickes. Det skal også kunne slåes til eller fra på private servere. Men husk, så snart den bliver offentligt, altså public, så skal den automatisk slåes til ligesom de andre features.
+
+3. Teknologi
+
+Frontend (Hvilket framework? Vanilla JS, React, Vue, Svelte?)
+Jeg tror jeg koder den i React da jeg kender lidt til den.
+Backend (Node.js, Python, Go, PHP, andet?)
+Jeg kender ikke til Backend, så jeg er ikke så sikker. Der må du fortælle mig hvad der er bedst
+Database (MySQL, PostgreSQL, Firebase, MongoDB?)
+Igen ved ikke meget om det, men har hørt meget om MySQL
+
+AI (Hvis AI bruges, hvilke teknologier? GPT, Hugging Face, egen model?)
+Når det skal bruges, tænker jeg din gratis model, eller Deepseek eller noget andet som er lovligt at bruge til monitization
+
+4. Server & Infrastruktur
+
+Hvor skal serveren hostes? (Dell-bærbar, cloud, anden lokal server?)
+Til at starte med tænker jeg min egen dell computer, men som spillet gror tror jeg, at jeg finder en cloud server
+
+Hvordan skal serveren håndtere flere spillere?
+Det ved jeg ikke, men det tror jeg du ved noget om
+
+Hvordan håndteres databasen? (Local storage, ekstern database?)
+Igen, no idea
+Skal spillet være browserbaseret eller have en dedikeret app?
+Spillet skal være på browsere, og på senere tidspunkt kunne gives som app til telefon, der kan spilles sammen med browser, og udgives på browser spille platforme som Y8, poki og crazygames osv
+
+5. Design & UI
+
+Skal designet ligne Skribbl.io eller noget nyt?
+Det skal ligne noget HELT nyt, da skribbl er meget grim. Det skal have mange flotte overgange i farvene som baggrund, og jeg laver selv mine ikoner
+
+Farvetema og UI-koncept?
+Jeg har lyst til at køre det i noget blå, lilla, grøn noget. Og til UI har jeg lyst til det meget cartoonish look. Altså det med de tydlige outlines og spejlingspletterne på ting
+
+Hvilke tegneværktøjer skal være tilgængelige? (pen, farver, størrelse, fyld osv.)
+Tror jeg har begrundet længere oppe, men ligesom skribbl, bare ldit flere ting, og man kan altid tilføje mere
+
+6. Brugertilpasning
+
+Skal brugere kunne vælge brugernavn, avatar osv.?
+Ja. De skal kunne "logge ind" som en gæst hvor de kan vælge navn, eller logge helt ind med discord (senere når vi får partnerskab), eller google eller bare lave en account så
+den kan huske point, kosmetiske ting og om du har købt noget premium eller noget
+
+Skal der være premium features eller kosmetiske ting?
+Jep. Premium ting har jeg sagt. Men kosmetiske ting vil jeg også gerne have. Jeg vil gerne have at man kan få baggrunde til dit spil, nye avatare, nye skins til malerbørste og mere. Alle dem skal
+selvfølgelig ikke koste noget, men nogle af dem
+
+Skal brugere kunne oprette egne ordlister?
+Har jeg svaret på, men ja!
+
+7. Økonomi & Monetarisering
+
+Skal spillet være helt gratis?
+Ja. Spillet skal være hundrede procent gratis både på nettet og telefon senere.
+
+Reklamer, premium features eller donationer?
+Der skal komme en reklame for hver gang du går ind på et spil, hver gang nogen vinder, og der skal være en lille reklame-banner nede i bunden. Hvis du mener hvordan jeg vil reklamere for det, vil jeg nok
+bare lave videoer på TikTok og Instragram, eller få gange købe nogle reklamer. Donationer skal være mulige gennem Buy Me A Coffee. Du kender nok hjemmeside
+
+Eventuel plan for fremtidige opdateringer og indtægtsmuligheder?
+Jeg har givet et par ideer til fremtidige opdateringer. Men der kommer nok flere
+
+8. Udviklingsplan & Deadlines
+Der er ikke rigtigt nogen deadline, men jeg vil gerne være sikker på at jeg har et godt produkt før jeg begynder at lancere. Vi kommer til at få mange beta-testere
+
+Hvornår skal MVP (Minimum Viable Product) være klar?
+Igen, ingen deadline, men så snart så muligt, uden stress
+
+Hvilke faser skal udviklingen deles op i?
+	Prototype
+	GUI og UI
+	Backend
+	Licenser
+	Betatestere
+	AI og Premium Features
+	Lancering
+	Opdateringer løbende
+
+Hvem skal arbejde på hvad? (Hvis du har medudviklere.)
+Der er kun mig. Men jeg kan godt få min far til at hjælpe med UI GUI delen, og min mor og familie til betatestning
