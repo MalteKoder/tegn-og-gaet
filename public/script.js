@@ -193,7 +193,7 @@ document.addEventListener('DOMContentLoaded', function() {
         ];
         screens.forEach(screen => {
             if (screen) {
-                screen.style.display = screen === screenToShow ? 'block' : 'none';
+                screen.style.display = (screen === screenToShow) ? 'block' : 'none';
             }
         });
     }
@@ -310,7 +310,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!isDrawing || !lastPosition || !ctx) return;
         
         const currentPos = getMousePos(e);
-        
+
         // Tilføj punktet til det nuværende strøg
         if (currentStroke) {
             currentStroke.points.push({ x: currentPos.x, y: currentPos.y });
@@ -580,7 +580,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     <span class="lobby-status ${lobby.gameInProgress ? 'status-in-progress' : 'status-waiting'}">
                         ${lobby.gameInProgress ? 'I gang' : 'Venter'}
                     </span>
-                    ${!lobby.gameInProgress && !isFull ? 
+                    ${(!lobby.gameInProgress && !isFull) ? 
                         `<button class="join-lobby-btn" data-id="${lobby.id}">Tilslut</button>` : 
                         ''}
                 </div>
@@ -933,8 +933,9 @@ document.addEventListener('DOMContentLoaded', function() {
     // Når en spiller forlader lobbyen
     socket.on('playerLeftLobby', (data) => {
         // Farvel besked
-        const departedPlayerName = data.playerId === socket.id ? 'Du' : 
-            (data.playerName || 'En spiller');
+        const departedPlayerName = (data.playerId === socket.id)
+            ? 'Du'
+            : (data.playerName || 'En spiller');
             
         addLobbyMessage({
             username: 'System',
@@ -1269,3 +1270,4 @@ document.addEventListener('DOMContentLoaded', function() {
     showScreen(mainMenu);
     console.log('Tegn og Gæt er indlæst og klar!');
 });
+
