@@ -1270,4 +1270,3 @@ document.addEventListener('DOMContentLoaded', function() {
     showScreen(mainMenu);
     console.log('Tegn og Gæt er indlæst og klar!');
 });
-
